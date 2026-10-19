@@ -1,4 +1,4 @@
-import { STORAGE_KEY, SEMESTERS, STATUSES, TYPES, SEED_COURSES } from './constants.js';
+import { STORAGE_KEY, SEMESTERS, STATUSES, TYPES, SEED_COURSES, CAL_COLORS, REPEATS } from './constants.js';
 
 export const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
 
@@ -24,6 +24,16 @@ export const newBook = (p = {}) => ({
   favorite: false, tags: [], folder: '', progress: 0, page: 1, bookmarks: [], fingerprint: '', ...p,
 });
 
+export const defaultCalendars = () => [
+  { id: 'cal-personnel', name: 'Personnel', color: 'blue', visible: true },
+  { id: 'cal-cours', name: 'Cours', color: 'red', visible: true },
+];
+export const newCalendar = (p = {}) => ({ id: uid(), name: 'Nouvel agenda', color: 'blue', visible: true, ...p });
+export const newEvent = (p = {}) => ({
+  id: uid(), calendarId: 'cal-personnel', title: '', location: '', description: '', date: '', start: '09:00', end: '10:00',
+  allDay: false, repeat: 'none', until: '', reminder: null, ...p,
+});
+
 export function seed() {
   return {
     version: 1,
@@ -32,11 +42,45 @@ export function seed() {
     notes: [],
     links: [],
     library: [],
+    calendars: defaultCalendars(),
+    events: [],
+    calPrefs: { todos: true, exams: true },
     read: [],
   };
 }
 
 // Toute donnée venant du disque ou d'un import passe ici : types, longueurs, valeurs autorisées.
+const hhmm = (v, fallback) => (typeof v === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(v) ? v : fallback);
+const REMINDER_VALUES = [0, 5, 15, 30, 60, 1440];
+
+function sanitizeCalendar(r) {
+  const cals = objs(r.calendars).map((c) => ({
+    id: str(c.id, 40) || uid(), name: str(c.name, 100) || 'Agenda', color: oneOf(c.color, CAL_COLORS.map(([k]) => k), 'blue'), visible: c.visible !== false,
+  }));
+  const calendars = cals.length ? cals : defaultCalendars();
+  const ids = new Set(calendars.map((c) => c.id));
+  const events = objs(r.events).filter((e) => isoDate(e.date)).map((e) => {
+    const allDay = e.allDay === true;
+    const start = hhmm(e.start, '09:00');
+    const end = hhmm(e.end, '10:00');
+    return {
+      id: str(e.id, 40) || uid(), calendarId: ids.has(e.calendarId) ? e.calendarId : calendars[0].id, title: str(e.title, 300) || 'Sans titre',
+      location: str(e.location, 300), description: str(e.description, 5000), date: isoDate(e.date), start, end: end > start ? end : start,
+      allDay, repeat: oneOf(e.repeat, REPEATS.map(([k]) => k), 'none'), until: isoDate(e.until),
+      reminder: REMINDER_VALUES.includes(e.reminder) ? e.reminder : null,
+    };
+  });
+  const p = r.calPrefs && typeof r.calPrefs === 'object' ? r.calPrefs : {};
+  return { calendars, events, calPrefs: { todos: p.todos !== false, exams: p.exams !== false } };
+}
+
+export function removeCalendar(state, id) {
+  if (state.calendars.length <= 1) return false;
+  state.calendars = state.calendars.filter((c) => c.id !== id);
+  state.events = state.events.filter((e) => e.calendarId !== id);
+  return true;
+}
+
 export function sanitizeState(raw) {
   const r = raw && typeof raw === 'object' ? raw : {};
   return {
@@ -71,6 +115,7 @@ export function sanitizeState(raw) {
       })),
       fingerprint: str(b.fingerprint, 400),
     })),
+    ...sanitizeCalendar(r),
     read: Array.isArray(r.read) ? r.read.filter((x) => typeof x === 'string').slice(0, 5000) : [],
   };
 }

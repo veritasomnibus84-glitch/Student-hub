@@ -6,6 +6,7 @@
   --todo-bg: #fbe8e5; --todo-fg: #98302a; --doing-bg: #fcf1d4; --doing-fg: #76560a;
   --done-bg: #e0f2e4; --done-fg: #24663a; --none-bg: #eceef3; --none-fg: #545c6f;
   --danger: #b3261e;
+  --cal-blue: #2b6fd6; --cal-red: #c9433c; --cal-green: #2f8f4e; --cal-amber: #b7791f; --cal-violet: #7a4bc4; --cal-teal: #12879a;
   --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-title: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --line: 1.75rem;
@@ -17,6 +18,7 @@
     --todo-bg: #3b2526; --todo-fg: #f0aaa6; --doing-bg: #3a3320; --doing-fg: #ecd083;
     --done-bg: #1f3a29; --done-fg: #94d8a6; --none-bg: #2a3733; --none-fg: #b4c1ba;
     --danger: #f2a39d;
+    --cal-blue: #7fb0f5; --cal-red: #f0908a; --cal-green: #7fd49a; --cal-amber: #e8bd6c; --cal-violet: #c0a0f0; --cal-teal: #6fd0e0;
   }
 }
 * { box-sizing: border-box; }
@@ -43,9 +45,10 @@ input.page-title--input { background: transparent; border-top: 0; border-left: 0
 
 /* Navigation : barre en bas sur mobile, onglets en haut sur grand écran */
 .top { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem 0.5rem 2rem; }
-.brand { font: 600 1.05rem var(--font-title); }
+.brand { display: inline-flex; align-items: center; gap: 0.5rem; font: 600 1.05rem var(--font-title); color: var(--ink); text-decoration: none; }
 .nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--card); border-top: 1px solid var(--edge); z-index: 5; }
-.nav a { flex: 1; text-align: center; padding: 0.85rem 0.25rem; font-size: 0.82rem; text-decoration: none; color: var(--ink-soft); }
+.nav { overflow-x: auto; scrollbar-width: none; }
+.nav a { flex: 1 0 auto; min-width: 4.4rem; text-align: center; padding: 0.85rem 0.5rem; font-size: 0.82rem; text-decoration: none; color: var(--ink-soft); }
 .nav a[aria-current="page"] { color: var(--blue); font-weight: 700; box-shadow: inset 0 3px 0 var(--margin); }
 main { padding: 0.5rem 1rem 6rem 2rem; max-width: 64rem; margin: 0 auto; outline: none; }
 @media (min-width: 48rem) {

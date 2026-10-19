@@ -6,9 +6,10 @@ export function openSheet(title, body, { onSubmit, submitLabel = 'Enregistrer', 
   const dlg = h('dialog', { class: 'sheet', 'aria-label': title });
   const form = h('form', {
     class: 'sheet__form',
-    onsubmit: (e) => {
+    onsubmit: async (e) => {
       e.preventDefault();
-      const msg = onSubmit?.();
+      error.textContent = '';
+      const msg = await onSubmit?.();
       if (msg) { error.textContent = msg; return; }
       dlg.close();
     },

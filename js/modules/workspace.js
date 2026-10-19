@@ -7,6 +7,8 @@ import { openSheet } from '../ui/dialog.js';
 
 const view = { courseId: null, query: '', type: '', sort: 'deadline' };
 
+export function showCourse(id) { view.courseId = id; }
+
 export function render(ctx) {
   const course = ctx.store.state.courses.find((c) => c.id === view.courseId);
   if (!course) view.courseId = null;
@@ -76,7 +78,15 @@ function coursePage(ctx, c) {
   const travaux = store.state.todos.filter((t) => t.courseId === c.id);
 
   return h('div', { class: 'page' },
-    h('button', { class: 'btn btn--ghost', onclick: () => { view.courseId = null; ctx.rerender(); } }, '← Workspace'),
+    h('div', { class: 'row between' },
+      h('button', { class: 'btn btn--ghost', onclick: () => { view.courseId = null; ctx.rerender(); } }, '← Workspace'),
+      h('button', {
+        class: 'btn btn--danger', onclick: () => {
+          if (!confirm(`Supprimer le cours « ${c.name} » ? Ses to-dos et notes seront conservés sans cours.`)) return;
+          store.commit((s) => removeCourse(s, c.id));
+          view.courseId = null; ctx.rerender();
+        },
+      }, 'Supprimer le cours')),
     h('h1', null, h('input', {
       class: 'page-title page-title--input', type: 'text', value: c.name, maxlength: 200, 'aria-label': 'Nom du cours',
       oninput: (e) => { c.name = e.target.value.trim() || 'Cours'; save(); },
@@ -94,14 +104,7 @@ function coursePage(ctx, c) {
       prop('Email', bindText('email', { type: 'email' })), prop('Salle de cours', bindText('room'))),
     area('Notes', 'notes'), area('Lectures', 'readings'), area('Questions', 'questions'),
     syllabus(ctx, c),
-    h('section', { class: 'block' }, h('h2', null, 'Mes to-dos'), todoSection(ctx, { courseId: c.id })),
-    h('div', { class: 'row end' }, h('button', {
-      class: 'btn btn--danger', onclick: () => {
-        if (!confirm(`Supprimer le cours « ${c.name} » ? Ses to-dos et notes seront conservés sans cours.`)) return;
-        store.commit((s) => removeCourse(s, c.id));
-        view.courseId = null; ctx.rerender();
-      },
-    }, 'Supprimer le cours')));
+    h('section', { class: 'block' }, h('h2', null, 'Mes to-dos'), todoSection(ctx, { courseId: c.id })));
 }
 
 function syllabus(ctx, c) {
@@ -157,8 +160,13 @@ function card(ctx, t, courses) {
     h('button', { class: 'card__main', onclick: () => openTodoDialog(ctx.store, t) },
       h('span', { class: 'card__name' }, t.name || 'Sans titre'),
       h('span', { class: 'card__meta' }, course && h('span', { class: 'chip' }, course.name), h('span', { class: 'chip' }, t.type), deadlineBadge(t.deadline))),
-    next && h('button', {
-      class: 'btn btn--ghost card__next', title: `Passer à « ${next} »`, 'aria-label': `Passer « ${t.name} » à ${next}`,
-      onclick: () => ctx.store.commit(() => { t.status = next; }),
-    }, '→'));
+    h('span', { class: 'card__actions' },
+      next && h('button', {
+        class: 'btn btn--ghost card__next', title: `Passer à « ${next} »`, 'aria-label': `Passer « ${t.name} » à ${next}`,
+        onclick: () => ctx.store.commit(() => { t.status = next; }),
+      }, '→'),
+      h('button', {
+        class: 'btn btn--ghost card__del', title: 'Supprimer', 'aria-label': `Supprimer « ${t.name} »`,
+        onclick: () => { if (confirm(`Supprimer le to-do « ${t.name || 'Sans titre'} » ?`)) ctx.store.commit((st) => { st.todos = st.todos.filter((x) => x.id !== t.id); }); },
+      }, '×')));
 }

@@ -2,7 +2,7 @@
 
 ## Objectif
 Une seule page web (HTML/CSS/JS, sans framework ni build) qui centralise la vie d'étudiant :
-Workspace (cours + to-dos façon Notion), Bibliothèque de PDF, Messages (résumés Gmail/WhatsApp faits par Hermes),
+Home, Workspace (cours + to-dos façon Notion), Agenda, Bibliothèque de PDF, Messages (résumés Gmail/WhatsApp faits par Hermes),
 Vidéos (chaînes YouTube choisies), Notes, Liens utiles. Minimaliste, modulaire, sans friction.
 Utilisateur : un étudiant, surtout sur téléphone (mobile-first).
 
@@ -15,6 +15,9 @@ Utilisateur : un étudiant, surtout sur téléphone (mobile-first).
 
 6. Bibliothèque : les fichiers PDF restent par appareil (IndexedDB), jamais dans le repo (droits d'auteur, taille). Seul le catalogue est partagé.
 
+7. Verrou d'accès : écran de connexion local (PBKDF2), sans chiffrement des données ; ne remplace pas une vraie authentification.
+8. Agenda : rappels uniquement app ouverte ; pas de synchronisation en ligne (import/export .ics).
+
 ## Commandes
 - Tests : `npm test`
 - Lancer en local : `python3 -m http.server 8080` puis http://localhost:8080 (les modules ES ne marchent pas en file://)
@@ -25,7 +28,7 @@ index.html, css/ (base, components), js/ (app, store, kanban, dom, constants, mo
 data/ (summaries.json, channels.json, videos.json), scripts/, tests/, tasks/.
 
 ## Modules (un fichier chacun, contrat : `render(ctx) -> Element`)
-workspace, library, messages, videos, notes, links. Ajouter un onglet = ajouter un module + une ligne dans app.js.
+home, workspace, calendar, library, messages, videos, notes, links. Ajouter un onglet = ajouter un module + une ligne dans app.js.
 
 ## Style de code
 ES modules, fonctions pures dans store.js/kanban.js (testables), DOM construit avec `h()` (jamais innerHTML).

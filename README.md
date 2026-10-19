@@ -1,6 +1,6 @@
 # Student Hub
 
-Une page, six onglets : Workspace (cours + to-dos façon Notion), Bibliothèque (PDF), Messages (résumés Hermes), Vidéos, Notes, Liens utiles.
+Une page, huit onglets : Home (accueil façon Obsidian), Workspace (cours + to-dos façon Notion), Agenda, Bibliothèque (PDF), Messages (résumés Hermes), Vidéos, Notes, Liens utiles.
 Aucun framework, aucun build. Thème « cahier Seyès » (clair) / « tableau » (sombre) selon le téléphone.
 
 ## Lancer
@@ -8,13 +8,25 @@ Aucun framework, aucun build. Thème « cahier Seyès » (clair) / « tableau »
 (les modules ES ne fonctionnent pas en ouvrant index.html directement). Tests : `npm install && npm test`.
 Hébergement : GitHub Pages (un repo privé exige un compte GitHub payant pour Pages).
 
+## Home
+Salutation, heure, recherche globale (cours, to-dos, événements, notes, livres, liens), aujourd'hui, à venir sur 7 jours, mini-calendrier, tâches (✓ pour terminer), récents, messages non lus, note du jour.
+
+## Agenda
+Vues semaine / mois / année, création rapide (clic sur un créneau de la semaine, double-clic sur un jour du mois, ou « + Événement »), titre, lieu, description, heures ou journée entière, répétition (jour, semaine, mois, an, jusqu'au…), rappels, plusieurs agendas colorés affichables ou masquables, recherche. Les deadlines de to-dos et les dates d'examen s'affichent automatiquement.
+- Rappels : affichés tant que l'app est ouverte (notification du navigateur si autorisée). Pas de rappel quand l'app est fermée (il faudrait une PWA + un serveur de notifications).
+- Pas de synchronisation Google/Nextcloud/Exchange (elle exigerait de stocker des identifiants) : importe ou exporte un fichier `.ics`.
+- Limites connues : un événement tient sur un seul jour ; une série se modifie en bloc (pas d'exception sur une occurrence).
+
+## Verrou d'accès
+« Données » → « Définir un verrou » (nom + mot de passe). L'app demande alors la connexion à chaque session. C'est un écran de connexion local : il ne chiffre pas les données et ne remplace pas un vrai compte. « Mot de passe oublié » efface le verrou **et** les données de l'appareil.
+
 ## Bibliothèque (PDF)
 Sections : Bibliothèque, Dossiers, Récents, Favoris, Signets. Vues : couvertures, grille, liste, condensée. Recherche, tri, regroupement (auteur, tag, dossier).
 Lecteur intégré (pdf.js, copie locale dans `vendor/pdfjs`, licence Apache 2.0) : zoom, signets, reprise à la dernière page, progression.
 - Les PDF sont stockés **dans le navigateur de chaque appareil** (IndexedDB) : ils ne sont jamais envoyés sur GitHub.
 - Le **catalogue** (titres, tags, favoris, signets, progression) est dans les données exportables.
 - Sur un deuxième appareil : importe ton catalogue, puis touche un livre « Fichier absent de cet appareil » et choisis le même PDF ; il est reconnu (nom + taille) et relié.
-- Test navigateur réel : `python3 -m http.server 8765` puis `python3 tests/e2e/library.e2e.py` (Playwright + reportlab).
+- Tests navigateur réel : `python3 -m http.server 8765` puis `python3 tests/e2e/library.e2e.py` et `python3 tests/e2e/app.e2e.py` (Playwright + reportlab).
 
 ## Données
 - **Éditables dans l'app** (cours, to-dos, notes, liens) : stockées dans le navigateur. Bouton « Données » en bas : Exporter / Importer / Réinitialiser.

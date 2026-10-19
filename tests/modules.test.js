@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { setupDOM, memory } from './helpers/dom.js';
 const win = setupDOM();
-const { createStore, newTodo, newNote, newLink, newBook } = await import('../js/store.js');
+const { createStore, newTodo, newNote, newLink, newBook, newEvent } = await import('../js/store.js');
+const { ymd } = await import('../js/calendar-logic.js');
 const { TABS } = await import('../js/app.js');
 
 const mod = (key) => TABS.find(([k]) => k === key)[2];
@@ -63,7 +64,7 @@ test('workspace : la recherche filtre le kanban', () => {
   input.value = ''; input.dispatchEvent(new win.Event('input'));
 });
 
-test('workspace : créer un to-do via la feuille modale', () => {
+test('workspace : créer un to-do via la feuille modale', async () => {
   const store = createStore(memory());
   const { host } = mount('workspace', store);
   click(byText(host, 'button', '+ To-do'));
@@ -71,16 +72,18 @@ test('workspace : créer un to-do via la feuille modale', () => {
   assert.ok(dlg);
   dlg.querySelector('input[type="text"]').value = 'Nouveau devoir';
   dlg.querySelector('form').dispatchEvent(new win.Event('submit', { cancelable: true }));
+  await new Promise((r) => setTimeout(r, 0));
   assert.equal(store.state.todos[0].name, 'Nouveau devoir');
   assert.equal(document.querySelector('dialog.sheet'), null);
 });
 
-test('workspace : un nom vide est refusé', () => {
+test('workspace : un nom vide est refusé', async () => {
   const store = createStore(memory());
   const { host } = mount('workspace', store);
   click(byText(host, 'button', '+ To-do'));
   const dlg = document.querySelector('dialog.sheet');
   dlg.querySelector('form').dispatchEvent(new win.Event('submit', { cancelable: true }));
+  await new Promise((r) => setTimeout(r, 0));
   assert.equal(store.state.todos.length, 0);
   assert.match(dlg.querySelector('.error').textContent, /obligatoire/);
   dlg.close();
@@ -174,4 +177,111 @@ test('bibliothèque : un titre HTML reste du texte', () => {
   const { host } = mount('library', store);
   assert.equal(host.querySelector('.book img[src="x"]'), null);
   assert.ok(host.textContent.includes('<img src=x'));
+});
+
+const submit = async (dlg) => { dlg.querySelector('form').dispatchEvent(new win.Event('submit', { cancelable: true })); await new Promise((r) => setTimeout(r, 0)); };
+
+test('agenda : mois, semaine, année s\'affichent et la navigation fonctionne', () => {
+  const store = createStore(memory());
+  store.commit((s) => { s.events.push(newEvent({ title: 'Cours physique', date: ymd(new Date()), start: '08:00', end: '10:00', repeat: 'weekly' })); });
+  const { host } = mount('calendar', store);
+  assert.ok(host.querySelector('.mgrid'));
+  assert.ok(host.textContent.includes('Cours physique'));
+  click(byText(host, '.seg__btn', 'Semaine'));
+  assert.ok(host.querySelector('.wk__col'));
+  assert.equal(host.querySelectorAll('.wk__col').length, 7);
+  assert.ok(host.querySelector('.wk__ev'));
+  click(byText(host, '.seg__btn', 'Année'));
+  assert.equal(host.querySelectorAll('.yr__m').length, 12);
+  click(byText(host, '.seg__btn', 'Mois'));
+  const title1 = host.querySelector('.cal__title').textContent;
+  click(host.querySelector('button[aria-label="Suivant"]'));
+  assert.notEqual(host.querySelector('.cal__title').textContent, title1);
+  click(byText(host, 'button', "Aujourd'hui"));
+  assert.equal(host.querySelector('.cal__title').textContent, title1);
+});
+
+test('agenda : créer un événement répété avec rappel via la feuille', async () => {
+  const store = createStore(memory());
+  const { host } = mount('calendar', store);
+  click(byText(host, 'button', '+ Événement'));
+  const dlg = document.querySelector('dialog.sheet');
+  dlg.querySelector('input[type="text"]').value = 'TP chimie';
+  const selects = dlg.querySelectorAll('select');
+  selects[1].value = 'weekly'; selects[1].dispatchEvent(new win.Event('change'));
+  selects[2].value = '15';
+  await submit(dlg);
+  const e = store.state.events[0];
+  assert.equal(e.title, 'TP chimie'); assert.equal(e.repeat, 'weekly'); assert.equal(e.reminder, 15);
+  assert.equal(document.querySelector('dialog.sheet'), null);
+});
+
+test('agenda : fin avant début refusée, titre obligatoire', async () => {
+  const store = createStore(memory());
+  const { host } = mount('calendar', store);
+  click(byText(host, 'button', '+ Événement'));
+  const dlg = document.querySelector('dialog.sheet');
+  await submit(dlg);
+  assert.match(dlg.querySelector('.error').textContent, /titre/);
+  dlg.querySelector('input[type="text"]').value = 'X';
+  const times = dlg.querySelectorAll('input[type="time"]');
+  times[0].value = '10:00'; times[1].value = '09:00';
+  await submit(dlg);
+  assert.match(dlg.querySelector('.error').textContent, /fin/);
+  assert.equal(store.state.events.length, 0);
+  dlg.close();
+});
+
+test('agenda : masquer un agenda retire ses événements de la vue ; la recherche trouve', () => {
+  const store = createStore(memory());
+  store.commit((s) => { s.events.push(newEvent({ title: 'Cours X', date: ymd(new Date()), calendarId: 'cal-cours' })); });
+  const { host } = mount('calendar', store);
+  assert.ok(host.querySelector('.mday__ev').textContent.length >= 0);
+  assert.ok(host.textContent.includes('Cours X'));
+  store.commit((s) => { s.calendars.find((c) => c.id === 'cal-cours').visible = false; });
+  const { host: h2 } = mount('calendar', store);
+  assert.ok(!h2.textContent.includes('Cours X'));
+  const search = h2.querySelector('input[type="search"]');
+  search.value = 'cours x'; search.dispatchEvent(new win.Event('input'));
+  assert.ok(h2.textContent.includes('Cours X'));
+  search.value = '';  search.dispatchEvent(new win.Event('input'));
+});
+
+test('agenda : les to-dos et examens apparaissent dans le jour sélectionné', () => {
+  const store = createStore(memory());
+  store.commit((s) => { s.todos.push(newTodo({ name: 'Rapport', deadline: ymd(new Date()) })); s.courses[0].exam = ymd(new Date()); });
+  const { host } = mount('calendar', store);
+  assert.ok(byText(host, '.ev--row', 'Rapport'));
+  assert.ok(byText(host, '.ev--row', 'Examen'));
+});
+
+test('home : salutation, recherche globale, tâches, note du jour', () => {
+  const store = createStore(memory());
+  store.commit((s) => { s.todos.push(newTodo({ name: 'Devoir immuno' })); });
+  const { host } = mount('home', store, { summaries: [{ id: 'a' }] });
+  assert.match(host.querySelector('.home__hello').textContent, /Bonjour|Bon après-midi|Bonsoir/);
+  assert.match(host.querySelector('.home__clock').textContent, /\d\d:\d\d/);
+  assert.ok(host.textContent.includes('1 non lu'));
+  const search = host.querySelector('input[type="search"]');
+  search.value = 'immuno'; search.dispatchEvent(new win.Event('input'));
+  assert.ok(byText(host, '.result', 'Devoir immuno'));
+  click(host.querySelector('button[aria-label^="Terminer"]'));
+  assert.equal(store.state.todos[0].status, 'Terminés');
+  click(byText(host, 'button', 'Note du jour'));
+  assert.equal(store.state.notes.length, 1);
+  click(byText(host, 'button', 'Note du jour'));
+  assert.equal(store.state.notes.length, 1, 'pas de doublon');
+});
+
+test('suppression : un cours depuis sa page, un to-do depuis sa carte', () => {
+  const store = createStore(memory());
+  store.commit((s) => { s.todos.push(newTodo({ name: 'À jeter' })); });
+  const { host } = mount('workspace', store);
+  click(host.querySelector('.card__del'));
+  assert.equal(store.state.todos.length, 0);
+  const n = store.state.courses.length;
+  click(byText(host, '.course', 'Chimie'));
+  click(byText(host, 'button', 'Supprimer le cours'));
+  assert.equal(store.state.courses.length, n - 1);
+  assert.ok(host.querySelector('.courses'));
 });

@@ -127,3 +127,72 @@ footer.reader__bar { border-bottom: 0; border-top: 1px solid var(--edge); justif
 .reader__page canvas { background: #fff; box-shadow: 0 0 0 1px var(--edge); max-width: none; }
 .reader__status { text-align: center; color: var(--ink-soft); margin: 0; }
 .reader__num { width: 4.5rem; text-align: center; }
+
+/* Couleurs des agendas (classes c--*) */
+.c--blue { --c: var(--cal-blue); } .c--red { --c: var(--cal-red); } .c--green { --c: var(--cal-green); }
+.c--amber { --c: var(--cal-amber); } .c--violet { --c: var(--cal-violet); } .c--teal { --c: var(--cal-teal); }
+.c--todo { --c: var(--todo-fg); } .c--exam { --c: var(--danger); }
+.dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--c); flex: none; }
+.ev { display: flex; gap: 0.4rem; align-items: baseline; text-align: left; font: inherit; font-size: 0.8rem; color: var(--ink); background: color-mix(in srgb, var(--c) 18%, var(--card)); border: 0; border-left: 3px solid var(--c); border-radius: 3px; padding: 0.1rem 0.35rem; cursor: pointer; overflow: hidden; }
+.ev__n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ev--row { width: 100%; font-size: 0.95rem; padding: 0.45rem 0.6rem; }
+.ev__t { color: var(--ink-soft); flex: none; min-width: 6.2rem; }
+
+/* Agenda : mois */
+.cal__title { font: 600 1.15rem var(--font-title); text-transform: capitalize; }
+.mgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.mgrid--head span { text-align: center; color: var(--ink-soft); font-size: 0.8rem; }
+.mday { display: flex; flex-direction: column; align-items: stretch; gap: 0.15rem; min-height: 3.6rem; padding: 0.25rem; background: var(--card); border: 1px solid var(--edge); border-radius: 3px; font: inherit; color: var(--ink); cursor: pointer; text-align: left; }
+.mday.is-out { opacity: 0.45; }
+.mday.is-sel { outline: 2px solid var(--blue); outline-offset: -2px; }
+.mday.is-today .mday__n { background: var(--blue); color: var(--card); border-radius: 999px; }
+.mday__n { align-self: flex-start; min-width: 1.5rem; text-align: center; font-size: 0.85rem; }
+.dots { display: flex; gap: 2px; flex-wrap: wrap; }
+.dots .dot { width: 0.4rem; height: 0.4rem; }
+.mday__ev { display: none; flex-direction: column; gap: 2px; }
+@media (min-width: 48rem) { .dots { display: none; } .mday__ev { display: flex; } .mday { min-height: 5.5rem; } }
+
+/* Agenda : semaine */
+.wk { background: var(--card); border: 1px solid var(--edge); border-radius: 4px; overflow-x: auto; }
+.wk__row { display: grid; grid-template-columns: 3.2rem repeat(7, minmax(5.2rem, 1fr)); min-width: 40rem; }
+.wk__gutter { font-size: 0.7rem; color: var(--ink-soft); text-align: right; padding-right: 0.3rem; }
+.wk__dayname { text-align: center; padding: 0.35rem 0; font-size: 0.85rem; color: var(--ink-soft); border-left: 1px solid var(--edge); }
+.wk__dayname b { font-size: 1.05rem; color: var(--ink); }
+.wk__dayname.is-today b { background: var(--blue); color: var(--card); border-radius: 999px; padding: 0 0.4rem; }
+.wk__allday { border-top: 1px solid var(--edge); border-bottom: 1px solid var(--edge); }
+.wk__cell { border-left: 1px solid var(--edge); padding: 2px; display: flex; flex-direction: column; gap: 2px; min-height: 1.6rem; }
+.wk__scroll { max-height: 58vh; overflow-y: auto; }
+.wk__h { display: block; height: 48px; transform: translateY(-0.5em); }
+.wk__col { position: relative; height: 1152px; border-left: 1px solid var(--edge); background-image: linear-gradient(var(--edge) 1px, transparent 1px); background-size: 100% 48px; cursor: cell; }
+.wk__col.is-today { background-color: color-mix(in srgb, var(--blue) 6%, transparent); }
+.wk__ev { position: absolute; display: flex; flex-direction: column; align-items: flex-start; gap: 0; overflow: hidden; font: inherit; font-size: 0.75rem; text-align: left; color: var(--ink); background: color-mix(in srgb, var(--c) 22%, var(--card)); border: 0; border-left: 3px solid var(--c); border-radius: 3px; padding: 1px 4px; cursor: pointer; }
+.wk__ev span { color: var(--ink-soft); }
+.wk__now { position: absolute; left: 0; right: 0; height: 2px; background: var(--margin); pointer-events: none; }
+
+/* Agenda : année et mini-calendrier */
+.yr { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); }
+.yr__m { background: var(--card); border: 1px solid var(--edge); border-radius: 4px; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; text-transform: capitalize; }
+.yr__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; font-size: 0.7rem; text-align: center; }
+.yr__grid--lg { font-size: 0.85rem; gap: 2px; }
+.yr__d { font: inherit; color: var(--ink); background: none; border: 0; border-radius: 3px; padding: 0.15rem 0; cursor: pointer; min-height: 1.2rem; }
+.yr__grid--lg .yr__d { min-height: 2.2rem; }
+.yr__d.is-out { opacity: 0.3; }
+.yr__d.has { box-shadow: inset 0 -3px 0 var(--margin); }
+.yr__d.is-today { background: var(--blue); color: var(--card); }
+
+/* Home */
+.home__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.home__hello { margin: 0; font: 600 1.8rem var(--font-title); }
+.home__clock { font: 600 2.2rem var(--font-title); color: var(--blue); font-variant-numeric: tabular-nums; }
+.home__grid { display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); align-items: start; }
+.results { margin-top: 0.4rem; }
+.result { display: flex; gap: 0.5rem; align-items: baseline; width: 100%; text-align: left; font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--edge); border-radius: 4px; padding: 0.5rem 0.7rem; cursor: pointer; }
+.result__t { font-weight: 600; flex: 1; overflow-wrap: anywhere; }
+
+/* Kanban : actions de carte, écran de verrou, rappels */
+.card__actions { display: flex; align-items: center; align-self: center; }
+.lock { min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 1.5rem; }
+.lock__form { display: flex; flex-direction: column; gap: 0.75rem; width: min(100%, 20rem); }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 4.5rem; z-index: 20; display: flex; align-items: center; gap: 0.5rem; background: var(--ink); color: var(--card); padding: 0.6rem 0.8rem; border-radius: 6px; max-width: 92vw; }
+.toast .btn { color: var(--card); }
+[hidden] { display: none !important; }
