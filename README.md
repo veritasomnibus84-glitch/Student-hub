@@ -11,6 +11,17 @@ Hébergement : GitHub Pages (un repo privé exige un compte GitHub payant pour P
 ## Home
 Salutation, heure, recherche globale (cours, to-dos, événements, notes, livres, liens), aujourd'hui, à venir sur 7 jours, mini-calendrier, tâches (✓ pour terminer), récents, messages non lus, note du jour.
 
+## Mémorisation (inspirée de Diane)
+Leçons → trois sous-onglets.
+- **Apprendre** : source du cours (texte collé), date d'examen, note visée /20, format d'examen, temps max par jour, **planning optimal** calculé par code (écart conseillé 30 % à 7 j → 7,5 % à 1 an, interpolé ; nouvelles cartes sur ~60 % du délai ; examens blancs à J-7 et J-2 ; plafond de minutes par jour) et jauges « temps gagné » / « maîtrise » (estimations).
+- **Retenir** : 6 types de cartes (question/réponse, définition, mot/traduction avec médiateur, QCM, vrai/faux, à trous), couches noyau/pilier/détail, barre maîtrisées/en cours/à étudier, vue liste ou grille, session de révision (3 boutons avec intervalles, QCM/V-F/trous corrigés tout seuls, lecture à voix haute si le navigateur la permet, clavier Espace et 1-2-3), import CSV/TSV/Anki, génération par IA sans clé (prompt à copier, JSON à coller). Répétition espacée FSRS-6 (paramètres de py-fsrs).
+- **S'exercer** : examen chronométré (affichage, durée, types, nombre, note prédite), correction (automatique ou, pour les réponses libres, auto-évaluation ou scores collés d'une IA), note /20, écart avec la prédiction, erreurs remises « à étudier », historique, journal des blocages + prompt de rattrapage.
+La série compte les jours de révision ; Home affiche les cartes dues et les tâches du jour du planning.
+Pas encore : planning branché sur l'Agenda, chat tuteur (fds-tutor.md), fiches et podcast.
+
+## Objectifs
+Établir un objectif pour x mois ou x ans (échéance, barre de temps écoulé, jours restants). Conseils : le guide d'utilisation complet est pré-rempli (modifiable, supprimable, jamais rajouté) ; bouton « Ajouter un conseil ».
+
 ## Agenda
 Vues semaine / mois / année, création rapide (clic sur un créneau de la semaine, double-clic sur un jour du mois, ou « + Événement »), titre, lieu, description, heures ou journée entière, répétition (jour, semaine, mois, an, jusqu'au…), rappels, plusieurs agendas colorés affichables ou masquables, recherche. Les deadlines de to-dos et les dates d'examen s'affichent automatiquement.
 - Rappels : affichés tant que l'app est ouverte (notification du navigateur si autorisée). Pas de rappel quand l'app est fermée (il faudrait une PWA + un serveur de notifications).

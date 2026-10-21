@@ -75,6 +75,12 @@ export function render(ctx) {
     ...[...s.notes].filter((n) => n.updated).sort((a, b) => b.updated.localeCompare(a.updated)).slice(0, 4).map((n) => ({ title: n.title || 'Sans titre', kind: 'Note', time: n.updated, tab: 'notes' })),
   ].sort((a, b) => b.time.localeCompare(a.time)).slice(0, 6);
 
+  const dueCards = MEM.stats(s.cards).due; const run = MEM.streak(s.revDays, today);
+  const memLines = s.decks.filter((d) => d.exam).sort((a, b) => a.exam.localeCompare(b.exam)).map((d) => {
+    const plan = buildPlan({ cards: s.cards.filter((c) => c.deckId === d.id), exam: d.exam, target: d.target, today, maxMin: d.maxMin });
+    return plan && `${d.name} (J-${plan.D}) : ${todayTasks(plan, today).map(describeTask).join(', ') || 'rien de prévu'}`;
+  }).filter(Boolean).slice(0, 3);
+
   return h('div', { class: 'page' },
     h('header', { class: 'home__head' },
       h('div', null, h('p', { class: 'home__hello' }, greeting(new Date().getHours())), h('p', { class: 'muted' }, longDate(today))), clock),

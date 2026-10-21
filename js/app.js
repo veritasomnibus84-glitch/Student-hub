@@ -17,6 +17,7 @@ import * as messages from './modules/messages.js';
 import * as videos from './modules/videos.js';
 import * as notes from './modules/notes.js';
 import * as links from './modules/links.js';
+import * as goals from './modules/goals.js';
 
 // Ajouter un onglet = un module (render(ctx) -> Element) + une ligne ici.
 export const TABS = [
