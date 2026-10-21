@@ -21,8 +21,8 @@ import * as goals from './modules/goals.js';
 
 // Ajouter un onglet = un module (render(ctx) -> Element) + une ligne ici.
 export const TABS = [
-  ['home', 'Home', home], ['workspace', 'Workspace', workspace], ['calendar', 'Agenda', calendar], ['focus', 'Focus', focus], ['revision', 'Mémorisation', revision],
-  ['library', 'Biblio', library], ['messages', 'Messages', messages], ['videos', 'Vidéos', videos], ['notes', 'Notes', notes], ['links', 'Liens', links], ['goals', 'Objectifs', goals],
+  ['home', 'Home', home], ['workspace', 'Workspace', workspace], ['calendar', 'Agenda', calendar], ['focus', 'Focus', focus], ['revision', 'Révision', revision],
+  ['library', 'Biblio', library], ['messages', 'Messages', messages], ['videos', 'Vidéos', videos], ['notes', 'Notes', notes], ['links', 'Liens', links],
 ];
 
 async function loadJSON(path, fallback) {

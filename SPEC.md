@@ -2,8 +2,8 @@
 
 ## Objectif
 Une seule page web (HTML/CSS/JS, sans framework ni build) qui centralise la vie d'étudiant :
-Home, Workspace (cours + to-dos façon Notion), Agenda, Focus (minuteur à arbre), Mémorisation (cartes à répétition espacée), Bibliothèque de PDF, Messages (résumés Gmail/WhatsApp faits par Hermes),
-Vidéos (chaînes YouTube choisies), Notes, Liens utiles, Objectifs et conseils. Minimaliste, modulaire, sans friction.
+Home, Workspace (cours + to-dos façon Notion), Agenda, Focus (minuteur à arbre), Révision (cartes à répétition espacée), Bibliothèque de PDF, Messages (résumés Gmail/WhatsApp faits par Hermes),
+Vidéos (chaînes YouTube choisies), Notes, Liens utiles. Minimaliste, modulaire, sans friction.
 Utilisateur : un étudiant, surtout sur téléphone (mobile-first).
 
 ## Hypothèses (à corriger si faux)
@@ -22,9 +22,7 @@ Utilisateur : un étudiant, surtout sur téléphone (mobile-first).
 10. Import/export : un panneau par onglet (ses seules données) et une sauvegarde complète depuis Home ; les PDF ne sont jamais exportés.
 11. Relations : événement 1-n tâches, 1-n notes ; une tâche peut être planifiée comme événement.
 
-12. Mémorisation : leçons et cartes (question/réponse, QCM) planifiées par FSRS-6 (paramètres de py-fsrs). Pas de clé IA dans le navigateur : on copie un prompt, on le donne à une IA, on colle le JSON renvoyé.
-
-13. Objectifs : objectifs à x mois/ans et conseils ; le guide d'utilisation est pré-rempli une seule fois (tipsSeeded).
+12. Révision : leçons et cartes (question/réponse, QCM) planifiées par FSRS-6 (paramètres de py-fsrs). Pas de clé IA dans le navigateur : on copie un prompt, on le donne à une IA, on colle le JSON renvoyé.
 
 ## Commandes
 - Tests : `npm test`
@@ -36,7 +34,7 @@ index.html, css/ (base, components), js/ (app, store, kanban, dom, constants, mo
 data/ (summaries.json, channels.json, videos.json), scripts/, tests/, tasks/.
 
 ## Modules (un fichier chacun, contrat : `render(ctx) -> Element`)
-home, workspace, calendar, focus, revision, library, messages, videos, notes, links, goals. Ajouter un onglet = ajouter un module + une ligne dans app.js.
+home, workspace, calendar, focus, revision, library, messages, videos, notes, links. Ajouter un onglet = ajouter un module + une ligne dans app.js.
 
 ## Style de code
 ES modules, fonctions pures dans store.js/kanban.js (testables), DOM construit avec `h()` (jamais innerHTML).
@@ -49,7 +47,7 @@ node:test + jsdom : logique pure (store, kanban, flux RSS) et rendu de chaque mo
 - Jamais : secrets dans le repo, innerHTML avec données, clone du design/code d'une autre app.
 
 ## Critères de réussite
-- Les 11 onglets s'affichent, aussi sans données.
+- Les 10 onglets s'affichent, aussi sans données.
 - To-dos : créer, modifier, filtrer, trier, avancer de statut ; persistance après rechargement.
 - Export puis import redonne le même état.
 - Tous les tests passent.

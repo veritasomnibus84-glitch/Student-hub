@@ -239,16 +239,3 @@ footer.reader__bar { border-bottom: 0; border-top: 1px solid var(--edge); justif
 .btn--grade-2 { background: var(--doing-bg); color: var(--doing-fg); }
 .btn--grade-3 { background: var(--done-bg); color: var(--done-fg); }
 progress { width: 100%; height: 0.6rem; accent-color: var(--blue); }
-.tabs { display: flex; gap: 0.4rem; }
-.tabs .btn { flex: 1; }
-.tabs .btn[aria-pressed="true"], .btn[aria-pressed="true"] { background: var(--blue); color: var(--card); border-color: var(--blue); }
-.cards--grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); }
-.cards--grid .card { flex-direction: column; }
-.pre { white-space: pre-line; margin: 0.4rem 0; }
-.tips summary { cursor: pointer; font-weight: 600; padding: 0.4rem 0; }
-.tip { background: var(--card); border: 1px solid var(--edge); border-radius: 4px; padding: 0.2rem 0.7rem; }
-.goal { width: 100%; }
-.exam__timer { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.2rem; }
-.big-note { font-size: 3rem; font-weight: 700; margin: 0; font-family: var(--font-title); }
-.plan__day { align-items: flex-start; gap: 0.6rem; }
-.plan__tasks { text-align: right; }

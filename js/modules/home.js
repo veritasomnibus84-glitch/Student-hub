@@ -4,8 +4,6 @@ import { ymd, parseYMD, addDays, MONTHS, DAY_LETTERS, monthGrid, shiftMonth, ite
 import { searchAll } from '../search.js';
 import { recents } from '../library-logic.js';
 import { slicesOf, slicesIn, total, formatMinutes } from '../focus-logic.js';
-import * as MEM from '../revision-logic.js';
-import { buildPlan, todayTasks, describeTask } from '../planning.js';
 import { openTodoDialog } from '../ui/todo-dialog.js';
 import { openEventDialog, openCalendarAt } from './calendar.js';
 import { showCourse } from './workspace.js';
@@ -111,10 +109,6 @@ export function render(ctx) {
       h('section', { class: 'block stack' }, h('h2', null, 'Focus'),
         h('p', null, `Aujourd'hui : ${formatMinutes(focusToday)} · ${trees} arbre${trees > 1 ? 's' : ''} planté${trees > 1 ? 's' : ''}`),
         h('button', { class: 'btn', onclick: () => { location.hash = '#focus'; } }, s.focusRun ? 'Session en cours' : 'Lancer une session')),
-      h('section', { class: 'block stack' }, h('h2', null, 'Mémorisation'),
-        h('p', null, `${dueCards} carte${dueCards > 1 ? 's' : ''} à réviser · série : ${run} jour${run > 1 ? 's' : ''}`),
-        memLines.length > 0 && h('ul', { class: 'plain' }, memLines.map((l) => h('li', { class: 'muted' }, l))),
-        h('button', { class: 'btn', onclick: () => { location.hash = '#revision'; } }, dueCards ? 'Réviser maintenant' : 'Ouvrir')),
       h('section', { class: 'block' }, h('h2', null, 'Messages'),
         h('button', { class: 'linkish', onclick: () => { location.hash = '#messages'; } }, unread ? `${unread} non lu${unread > 1 ? 's' : ''}` : 'Aucun message non lu'))));
 }
