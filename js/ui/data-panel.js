@@ -5,7 +5,7 @@ import { download } from './download.js';
 
 const LABELS = {
   courses: 'cours', todos: 'to-dos', calendars: 'agendas', events: 'événements', calPrefs: 'réglages', focusTags: 'tags', sessions: 'sessions',
-  library: 'livres', decks: 'leçons', cards: 'cartes', localSummaries: 'résumés', read: 'lus', localVideos: 'vidéos', notes: 'notes', links: 'liens',
+  library: 'livres', decks: 'leçons', cards: 'cartes', gaps: 'blocages', exams: 'examens', revDays: 'jours', goals: 'objectifs', tips: 'conseils', tipsSeeded: 'réglage', localSummaries: 'résumés', read: 'lus', localVideos: 'vidéos', notes: 'notes', links: 'liens',
 };
 const HINTS = {
   messages: 'Importe le fichier summaries.json d\'Hermes ou un export de cet onglet.',

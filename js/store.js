@@ -1,5 +1,6 @@
 import { parseImport, applyImport, exportAll, exportSection, mergeList } from './data-io.js';
 import { sanitizeRevision } from './revision-logic.js';
+import { sanitizeGoals, guideTips } from './goals-logic.js';
 import { STORAGE_KEY, SEMESTERS, STATUSES, TYPES, SEED_COURSES, CAL_COLORS, REPEATS } from './constants.js';
 
 export const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
@@ -63,6 +64,12 @@ export function seed() {
     read: [],
     decks: [],
     cards: [],
+    gaps: [],
+    exams: [],
+    revDays: [],
+    goals: [],
+    tips: guideTips(),
+    tipsSeeded: true,
   };
 }
 
@@ -176,6 +183,7 @@ export function sanitizeState(raw) {
     ...sanitizeFocus(r),
     ...sanitizeLocal(r),
     ...sanitizeRevision(r),
+    ...sanitizeGoals(r),
     read: Array.isArray(r.read) ? r.read.filter((x) => typeof x === 'string').slice(0, 5000) : [],
   };
 }

@@ -1,6 +1,6 @@
 # Student Hub
 
-Une page, dix onglets : Home (accueil façon Obsidian), Workspace (cours + to-dos façon Notion), Agenda, Focus (minuteur façon Forest), Révision (cartes à répétition espacée), Bibliothèque (PDF), Messages (résumés Hermes), Vidéos, Notes, Liens utiles.
+Une page, onze onglets : Home (accueil façon Obsidian), Workspace (cours + to-dos façon Notion), Agenda, Focus (minuteur façon Forest), Mémorisation (cartes à répétition espacée), Bibliothèque (PDF), Messages (résumés Hermes), Vidéos, Notes, Liens utiles, Objectifs (objectifs à x mois ou x ans + conseils, avec le guide complet de l'app).
 Aucun framework, aucun build. Thème « cahier Seyès » (clair) / « tableau » (sombre) selon le téléphone.
 
 ## Lancer

@@ -22,12 +22,16 @@ Ordre = dépendances. Une tranche verticale à la fois : implémenter, tester, v
 - [x] T18 Relations événement ↔ tâches ↔ notes, planification d'une tâche en événement.
 - [x] T19 Import/export par onglet + sauvegarde complète dans Home.
 
-- [x] T9 Révision (v1) : leçons, cartes question/réponse et QCM, FSRS-6 (paramètres vérifiés contre py-fsrs), session avec 3 boutons et intervalles, génération par prompt + JSON collé. Tests.
+- [x] T9 Mémorisation (v1, ex-Révision) : leçons, cartes question/réponse et QCM, FSRS-6 (paramètres vérifiés contre py-fsrs), session avec 3 boutons et intervalles, génération par prompt + JSON collé. Tests.
 
 ## À faire
 - [ ] T8 Synchro GitHub (le catalogue de la bibliothèque en fait partie, pas les PDF) sans token dans le navigateur : l'app charge `data/state.json` du repo (lecture), l'export JSON se commit depuis OpenCode/Codespaces ou une Action.
       Critère : état identique sur téléphone et PC après commit + rechargement.
-- [ ] T9b Révision, suite : mode examen chronométré + correction, planning (date d'examen), série quotidienne, cartes à trous / V-F natives, liste des dues dans Home.
+- [x] T9b Mémorisation, suite : examen chronométré + correction, planning, série, cartes à trous / V-F, dues dans Home. Étapes 1-2 du plan (3 sous-onglets, couches, import CSV, vue grille).
+- [x] T10 Objectifs et conseils (guide pré-rempli).
+- [ ] T11 Chat tuteur (fds-tutor.md : prompt + blocs sources/profil/plan_session, collage de la réponse, lecture du session_log).
+- [ ] T12 Apprendre : fiches (4 styles x 4 longueurs), podcast (script + voix du navigateur), cartographie en couches.
+- [ ] T13 Planning dans l'Agenda, XP/niveaux.
 - [ ] T10 PWA installable (manifest + service worker), mode hors ligne.
 - [ ] T11 Agenda : créer par glisser, modifier une seule occurrence d'une série, événements sur plusieurs jours.
 - [ ] T12 Import de cartes depuis PDF/texte (génération via un modèle côté script, jamais de clé dans le navigateur).
