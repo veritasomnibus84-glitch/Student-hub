@@ -1,0 +1,60 @@
+/* Thème « cahier Seyès » (clair) et « tableau » (sombre). */
+:root {
+  color-scheme: light dark;
+  --paper: #f4f7fd; --card: #ffffff; --ink: #1c2333; --ink-soft: #5a637b;
+  --rule: #d3def4; --edge: #b9c8e8; --margin: #c9433c; --blue: #274a9e; --blue-soft: #e3eafa;
+  --todo-bg: #fbe8e5; --todo-fg: #98302a; --doing-bg: #fcf1d4; --doing-fg: #76560a;
+  --done-bg: #e0f2e4; --done-fg: #24663a; --none-bg: #eceef3; --none-fg: #545c6f;
+  --danger: #b3261e;
+  --cal-blue: #2b6fd6; --cal-red: #c9433c; --cal-green: #2f8f4e; --cal-amber: #b7791f; --cal-violet: #7a4bc4; --cal-teal: #12879a;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-title: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --line: 1.75rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #16201e; --card: #1f2c29; --ink: #e8eee9; --ink-soft: #a6b5ae;
+    --rule: rgba(232, 238, 233, 0.07); --edge: #34463f; --margin: #d98b8b; --blue: #9dc4ef; --blue-soft: #243849;
+    --todo-bg: #3b2526; --todo-fg: #f0aaa6; --doing-bg: #3a3320; --doing-fg: #ecd083;
+    --done-bg: #1f3a29; --done-fg: #94d8a6; --none-bg: #2a3733; --none-fg: #b4c1ba;
+    --danger: #f2a39d;
+    --cal-blue: #7fb0f5; --cal-red: #f0908a; --cal-green: #7fd49a; --cal-amber: #e8bd6c; --cal-violet: #c0a0f0; --cal-teal: #6fd0e0;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; font: 1rem/1.5 var(--font-ui); color: var(--ink); background-color: var(--paper);
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px); background-size: 100% var(--line);
+}
+body::before { content: ""; position: fixed; inset: 0 auto 0 0.9rem; width: 2px; background: var(--margin); opacity: 0.5; pointer-events: none; }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 1rem; top: 1rem; background: var(--card); padding: 0.5rem 0.75rem; z-index: 10; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+a { color: var(--blue); }
+h1, h2 { margin: 0; line-height: 1.2; }
+h2 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+.muted { color: var(--ink-soft); font-size: 0.9rem; margin: 0; }
+.error { color: var(--danger); margin: 0; min-height: 0; }
+.page-title {
+  font: 600 1.9rem/1.2 var(--font-title); display: inline-block; padding-bottom: 0.15rem; margin: 0 0 1rem;
+  border-bottom: 3px double var(--margin);
+}
+input.page-title--input { background: transparent; border-top: 0; border-left: 0; border-right: 0; border-radius: 0; width: 100%; color: var(--ink); }
+
+/* Navigation : barre en bas sur mobile, onglets en haut sur grand écran */
+.top { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem 0.5rem 2rem; }
+.brand { display: inline-flex; align-items: center; gap: 0.5rem; font: 600 1.05rem var(--font-title); color: var(--ink); text-decoration: none; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--card); border-top: 1px solid var(--edge); z-index: 5; }
+.nav { overflow-x: auto; scrollbar-width: none; }
+.nav a { flex: 1 0 auto; min-width: 4.4rem; text-align: center; padding: 0.85rem 0.5rem; font-size: 0.82rem; text-decoration: none; color: var(--ink-soft); }
+.nav a[aria-current="page"] { color: var(--blue); font-weight: 700; box-shadow: inset 0 3px 0 var(--margin); }
+main { padding: 0.5rem 1rem 6rem 2rem; max-width: 64rem; margin: 0 auto; outline: none; }
+@media (min-width: 48rem) {
+  .nav { position: static; border: 0; background: transparent; margin-left: auto; }
+  .nav a { padding: 0.5rem 0.9rem; font-size: 0.95rem; }
+  .nav a[aria-current="page"] { box-shadow: inset 0 -3px 0 var(--margin); }
+  main { padding-bottom: 3rem; }
+}
+@media (prefers-reduced-motion: no-preference) { .btn { transition: background-color 0.12s; } }
