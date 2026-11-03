@@ -1,0 +1,40 @@
+# Test navigateur réel : onglets Mémorisation et Objectifs (CSP stricte, aucune erreur console).
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    b = p.chromium.launch()
+    ctx = b.new_context(viewport={"width": 390, "height": 800})
+    pg = ctx.new_page()
+    errors = []
+    pg.on("pageerror", lambda e: errors.append(str(e)))
+    pg.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+    pg.goto("http://localhost:8765/index.html#revision")
+    pg.wait_for_selector("h1")
+    assert "Mémorisation" in pg.inner_text("h1")
+    pg.get_by_role("button", name="+ Leçon").click()
+    pg.locator("dialog input[type=text]").fill("Cinématique")
+    pg.locator("dialog input[type=date]").fill("2026-12-15")
+    pg.locator("dialog button[type=submit]").click()
+    assert "Source du cours" in pg.inner_text("main")
+    pg.get_by_role("button", name="Retenir").click()
+    pg.get_by_role("button", name="+ Carte").click()
+    pg.locator("dialog textarea").nth(0).fill("Définition de la vitesse ?")
+    pg.locator("dialog textarea").nth(1).fill("dx/dt")
+    pg.locator("dialog button[type=submit]").click()
+    pg.get_by_role("button", name="▶ Réviser").click()
+    pg.get_by_role("button", name="Révéler la réponse").click()
+    assert "dx/dt" in pg.inner_text("main")
+    pg.keyboard.press("3")
+    assert "à jour" in pg.inner_text("main")
+    pg.goto("http://localhost:8765/index.html#goals")
+    pg.wait_for_selector("h1")
+    assert pg.locator(".tip").count() >= 15
+    pg.get_by_role("button", name="Établir un objectif").click()
+    pg.locator("dialog input[type=text]").fill("Valider le S1")
+    pg.locator("dialog button[type=submit]").click()
+    assert "Valider le S1" in pg.inner_text("main")
+    pg.goto("http://localhost:8765/index.html#home")
+    pg.wait_for_selector("h2:has-text('Mémorisation')")
+    assert not errors, errors
+    print("memo e2e OK")
+    b.close()

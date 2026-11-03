@@ -1,0 +1,6 @@
+node_modules/
+.env*
+!.env.example
+
+# Exports de l'app : jamais dans le dépôt public (docs/decisions/018)
+student-hub-*.json

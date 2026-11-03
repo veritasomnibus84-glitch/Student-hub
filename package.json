@@ -1,0 +1,17 @@
+{
+  "name": "student-hub",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "build:tutor": "node scripts/build-tutor-prompt.mjs",
+    "build:sw": "node scripts/build-sw.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^6.4.299"
+  }
+}

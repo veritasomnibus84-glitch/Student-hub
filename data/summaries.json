@@ -1,0 +1,4 @@
+[
+  { "id": "demo-1", "source": "gmail", "from": "Exemple (à remplacer)", "subject": "Convocation examen", "summary": "Exemple : l'examen de Physique est confirmé pour la semaine prochaine, salle à vérifier.", "date": "2026-10-16T18:30:00Z" },
+  { "id": "demo-2", "source": "whatsapp", "from": "Groupe de classe (exemple)", "summary": "Exemple : le devoir de Chimie est reporté à vendredi.", "date": "2026-10-17T08:10:00Z" }
+]
